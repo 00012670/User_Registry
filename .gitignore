@@ -1,0 +1,24 @@
+# .NET Core
+**/bin/
+**/obj/
+*.user
+*.suo
+*.userprefs
+debug/
+*.nupkg
+*.log
+*.slnx.user
+*.cache
+*.dist
+*.InstallLog
+*.InstallState
+*.pidb
+*.suo
+*.sln.docstates
+wwwroot/
+
+# Angular
+/node_modules
+/dist
+*.log
+.env
