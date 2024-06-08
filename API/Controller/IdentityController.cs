@@ -1,13 +1,6 @@
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using API.Context;
-using API.Models;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using API.Services;
+using API.Models;
 
 namespace API.Controllers
 {
@@ -15,74 +8,61 @@ namespace API.Controllers
     [Route("[controller]")]
     public class IdentityController : ControllerBase
     {
-        private readonly DBContext _context;
-        private readonly IPasswordHasher<User> _passwordHasher;
-
-        public IdentityController(DBContext context, IPasswordHasher<User> passwordHasher)
+        private readonly UserService _userService;
+        private readonly AuthenticationService _authService;
+        public IdentityController(UserService userService, AuthenticationService authService)
         {
-            _context = context;
-            _passwordHasher = passwordHasher;
+            _userService = userService;
+            _authService = authService;
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(string username, string email, string password)
+        public async Task<IActionResult> Register([FromBody] RegistrationData data)
         {
-            if (_context.Users.Any(u => u.Username == username))
+            if (data == null || data.Username == null || data.Email == null || data.Password == null)
             {
-                return BadRequest("Username is already taken");
+                return BadRequest(new { Message = "Invalid registration data." });
             }
-
-            if (_context.Users.Any(u => u.Email == email))
+            var (validationResult, user) = await _userService.ValidateAndCreateUser(data.Username, data.Email, data.Password);
+            if (!validationResult.IsValid)
             {
-                return BadRequest("Email is already taken");
+                return BadRequest(new { Message = validationResult.ErrorMessage });
             }
-
-            var user = new User
+            if (user == null)
             {
-                Username = username,
-                Email = email,
-                Password = _passwordHasher.HashPassword(null, password),
-                LastLogin = DateTime.UtcNow,
-                Status = Status.Active
-            };
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-
-            return Ok();
+                return BadRequest(new { Message = "User creation failed." });
+            }
+            return GenerateTokenResponse(user);
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(string identifier, string password)
+        public async Task<IActionResult> Login([FromBody] Login data)
         {
-            var user = _context.Users.FirstOrDefault(u =>
-                u.Username == identifier || u.Email == identifier
-            );
-
-            if (
-                user == null
-                || _passwordHasher.VerifyHashedPassword(null, user.Password, password)
-                    != PasswordVerificationResult.Success
-            )
+            if (data == null || data.Username == null || data.Password == null)
             {
-                return Unauthorized();
+                return BadRequest(new { Message = "Invalid registration data." });
             }
+            var (validationResult, user) = await _userService.ValidateAndFindUser(data.Username, data.Password);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(new { Message = validationResult.ErrorMessage });
+            }
+            if (user == null)
+            {
+                return BadRequest(new { Message = "User creation failed." });
+            }
+            return GenerateTokenResponse(user);
 
-            var claims = new List<Claim> { new Claim(ClaimTypes.Name, user.Username) };
+        }
 
-            var claimsIdentity = new ClaimsIdentity(
-                claims,
-                CookieAuthenticationDefaults.AuthenticationScheme
-            );
-
-            var authProperties = new AuthenticationProperties();
-
-            await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(claimsIdentity),
-                authProperties
-            );
-
-            return Ok();
+        private IActionResult GenerateTokenResponse(User user)
+        {
+            if (user == null)
+            {
+                return BadRequest(new { Message = "User operation failed." });
+            }
+            var token = _authService.GenerateJwtToken(user);
+            return Ok(new { Token = token });
         }
     }
 }

@@ -1,0 +1,64 @@
+<div class="outer">
+  <div class="container">
+    <div class="row">
+      <div class="panel">
+        <div class="panel border bg-white">
+          <div class="panel-heading">
+            <h2 class="pt-5 font-weight-bold">Welcome to User Registry</h2>
+            <p class="pt-1 text-muted">Please enter your details</p>
+          </div>
+          <div class="panel-body p-3">
+            <form [formGroup]="signUpForm" (ngSubmit)="onSignup()">
+              <div class="form-group">
+                <div class="input-field">
+                  <span class="fa fa-user fa-lg p-2"></span>
+                  <input formControlName="username" type="text" placeholder="Username">
+                </div>
+                <small *ngIf="signUpForm.get('username')?.hasError('required') && signUpForm.get('username')?.dirty">
+                  *Username is required
+                </small>
+              </div>
+
+              <div class="form-group pt-3">
+                <div class="input-field">
+                  <span class="fa fa-envelope p-2"></span>
+                  <input formControlName="email" type="text" placeholder="Email">
+                </div>
+                <small *ngIf="signUpForm.get('email')?.hasError('required') && signUpForm.get('email')?.dirty">
+                  *Email is required
+                </small>
+                <small *ngIf="signUpForm.get('email')?.hasError('email') && signUpForm.get('email')?.dirty">
+                  *Invalid email format
+                </small>
+              </div>
+
+              <div class="form-group pt-3">
+                <div class="input-field">
+                  <span class="fa fa-lock fa-lg p-2"></span>
+                  <input formControlName="password" [type]="type" placeholder="Password">
+                  <span (click)="hideShowPass()" class="fa {{eyeIcon}}"></span>
+                </div>
+                <small *ngIf="signUpForm.controls['password'].dirty && signUpForm.hasError('required', 'password')">
+                  *Password is required
+                </small>
+              </div>
+
+              <div class="form-group pt-4">
+                <input type="checkbox" id="rememberMe" class="rememberMe  form-check-input fs-5">
+                <label for="rememberMe" class="label-agree-term ms-2">
+                  <span> Remember me</span>
+                </label>
+              </div>
+
+              <button type="submit" class="btn btn-orange btn-block mt-4 w-100">Sign up</button>
+
+              <div class="text-center pt-5 text-muted account-text">
+                Don't have an account? <a id="forget" routerLink="/login">Login</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
