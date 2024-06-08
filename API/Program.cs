@@ -9,7 +9,16 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowLocalhost",
+        builder => builder
+            .WithOrigins("http://localhost:4200")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials());
+});
+
 builder
     .Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
@@ -18,8 +27,10 @@ builder
     });
 
 builder.Services.AddAuthorization();
-
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+.AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
 
 builder.Services.AddSwaggerGen();
 
@@ -36,12 +47,18 @@ builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<ValidationService>();
 builder.Services.Configure<JWTSettings>(builder.Configuration.GetSection("Jwt"));
-builder.Services.AddControllers().AddJsonOptions(x =>
+builder.Services.AddControllers()
+.AddJsonOptions(x =>
     x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve
 );
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+
+app.UseCors("AllowLocalhost");
 app.UseSwagger();
 app.UseSwaggerUI();
 

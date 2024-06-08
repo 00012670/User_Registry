@@ -1,1 +1,69 @@
-<p>dashboard works!</p>
+<app-navbar></app-navbar>
+<div class="centered">
+  <h2 class="mt-5">Dashboard</h2>
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <p>Welcome, {{ currentUser?.unique_name }}! Your email is {{ currentUser?.email }} </p>
+
+  </div>
+
+  <div>
+    <button class="btn btn-secondary mr mt-2" (click)="blockSelectedUsers()">Block<svg
+        xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0,0,256,256">
+        <g fill="#ffffff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt"
+          stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none"
+          font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal">
+          <g transform="scale(10.66667,10.66667)">
+            <path
+              d="M12,1c-3.32381,0 -6,2.67619 -6,6v1c-1.1,0 -2,0.9 -2,2v10c0,1.1 0.9,2 2,2h12c1.1,0 2,-0.9 2,-2v-10c0,-1.1 -0.9,-2 -2,-2v-1c0,-3.32381 -2.67619,-6 -6,-6zM12,3c2.27619,0 4,1.72381 4,4v1h-8v-1c0,-2.27619 1.72381,-4 4,-4zM12,13c1.1,0 2,0.9 2,2c0,1.1 -0.9,2 -2,2c-1.1,0 -2,-0.9 -2,-2c0,-1.1 0.9,-2 2,-2z">
+            </path>
+          </g>
+        </g>
+      </svg></button>
+    <button class="btn btn-secondary mr  mt-2" (click)="unblockSelectedUsers()"><svg xmlns="http://www.w3.org/2000/svg"
+        x="0px" y="0px" width="20" height="20" viewBox="0,0,256,256">
+        <g fill="#ffffff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt"
+          stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none"
+          font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal">
+          <g transform="scale(9.84615,9.84615)">
+            <path
+              d="M7,0c-2.21094,0 -4.12109,0.91797 -5.3125,2.40625c-1.19141,1.48828 -1.6875,3.41797 -1.6875,5.5v3.09375h3v-3.09375c0,-1.57812 0.39063,-2.82031 1.03125,-3.625c0.64063,-0.80469 1.51172,-1.28125 2.96875,-1.28125c1.46094,0 2.32813,0.44922 2.96875,1.25c0.64063,0.80078 1.03125,2.05859 1.03125,3.65625v1.09375h3v-1.09375c0,-2.09375 -0.52734,-4.04297 -1.71875,-5.53125c-1.19141,-1.48828 -3.07422,-2.375 -5.28125,-2.375zM9,10c-1.65625,0 -3,1.34375 -3,3v10c0,1.65625 1.34375,3 3,3h14c1.65625,0 3,-1.34375 3,-3v-10c0,-1.65625 -1.34375,-3 -3,-3zM16,15c1.10547,0 2,0.89453 2,2c0,0.73828 -0.40234,1.37109 -1,1.71875v2.28125c0,0.55078 -0.44922,1 -1,1c-0.55078,0 -1,-0.44922 -1,-1v-2.28125c-0.59766,-0.34766 -1,-0.98047 -1,-1.71875c0,-1.10547 0.89453,-2 2,-2z">
+            </path>
+          </g>
+        </g>
+      </svg></button>
+    <button class="btn btn-danger mr  mt-2" (click)="deleteSelectedUsers()"><svg xmlns="http://www.w3.org/2000/svg"
+        x="0px" y="0px" width="20" height="20" viewBox="0,0,256,256">
+        <g fill="#ffffff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt"
+          stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none"
+          font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal">
+          <g transform="scale(10.66667,10.66667)">
+            <path
+              d="M10.80664,2c-0.517,0 -1.01095,0.20431 -1.37695,0.57031l-0.42969,0.42969h-5c-0.36064,-0.0051 -0.69608,0.18438 -0.87789,0.49587c-0.18181,0.3115 -0.18181,0.69676 0,1.00825c0.18181,0.3115 0.51725,0.50097 0.87789,0.49587h16c0.36064,0.0051 0.69608,-0.18438 0.87789,-0.49587c0.18181,-0.3115 0.18181,-0.69676 0,-1.00825c-0.18181,-0.3115 -0.51725,-0.50097 -0.87789,-0.49587h-5l-0.42969,-0.42969c-0.365,-0.366 -0.85995,-0.57031 -1.37695,-0.57031zM4.36523,7l1.52734,13.26367c0.132,0.99 0.98442,1.73633 1.98242,1.73633h8.24805c0.998,0 1.85138,-0.74514 1.98438,-1.74414l1.52734,-13.25586z">
+            </path>
+          </g>
+        </g>
+      </svg></button>
+    <br>
+    <h2 class="mt-4">All Users</h2>
+    <table class="table table-striped mt-3">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Username</th>
+          <th scope="col">Email</th>
+          <th scope="col">Last login</th>
+          <th scope="col">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td><input type="checkbox" class="checkbox" [(ngModel)]="user.isSelected" (click)="toggleSelection(user)">
+          </td>
+          <td>{{user.username}}</td>
+          <td>{{user.email}}</td>
+          <td>{{user.lastLogin | date:'short'}}</td>
+          <td>{{userService.getStatus(user.status)}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>

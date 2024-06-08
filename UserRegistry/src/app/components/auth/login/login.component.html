@@ -1,1 +1,53 @@
-<p>login works!</p>
+<div class="outer">
+  <div class="container d-flex justify-content-center align-items-center">
+    <div class="panel">
+      <div class="panel border shadow-sm p-4 rounded">
+        <div class="panel-heading text-center">
+          <h3 class="pt-2 font-weight-bold">Welcome to User</h3>
+          <p class="pt-1 text-muted">Please enter your details</p>
+        </div>
+        <div class="panel-body p-3">
+          <form [formGroup]="loginForm">
+
+            <!-- Email input -->
+            <div data-mdb-input-init class="form-outline mb-4">
+              <label class="form-label" for="form2Example1">Username</label>
+              <input formControlName="username" type="text" id="form2Example1" class="form-control"
+                placeholder="Username" autocomplete="current-username" />
+              <small class="text-danger"
+                *ngIf="loginForm.controls['username'].dirty && loginForm.hasError('required', 'username')">
+                Username is required
+              </small>
+            </div>
+
+            <!-- Password input -->
+            <div data-mdb-input-init class="form-outline mb-4">
+              <label class="form-label mr" for="form2Example2">Password</label>
+              <span (click)="hideShowPass()" class="fa {{eyeIcon}}"></span>
+              <input formControlName="password" [type]="type" id="form2Example2" class="form-control"
+                placeholder="Password" autocomplete="current-password" />
+              <small class="text-danger"
+                *ngIf="loginForm.controls['password'].dirty && loginForm.hasError('required', 'password')">
+                Password is required
+              </small>
+            </div>
+
+            <div class="form-check mb-4">
+              <input type="checkbox" id="rememberMe" class="form-check-input" />
+              <label for="rememberMe" class="form-check-label">Remember me</label>
+            </div>
+
+            <!-- Submit button -->
+            <button (click)="onSubmit()" type="submit" data-mdb-button-init data-mdb-ripple-init
+              class="btn btn-primary btn-block w-100 mb-4">Login</button>
+
+            <!-- Register buttons -->
+            <div class="text-center mt-2">
+              <p>Don't have an account? <a [routerLink]="['/signup']">SignUp</a></p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

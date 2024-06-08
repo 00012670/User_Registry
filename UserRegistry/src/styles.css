@@ -1,1 +1,64 @@
-/* You can add global styles to this file, and also import other style files */
+.outer {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.panel {
+  width: 100%;
+  max-width: 400px;
+}
+
+.container {
+  height: 100%;
+}
+
+.centered {
+  width: 76%;
+  margin: auto;
+}
+
+.mr {
+  margin-right: 0.5rem;
+}
+
+.text-danger {
+  color: red;
+}
+
+.btn-primary {
+  background-color: #6161ff;
+  border-color: #6161ff;
+}
+
+.btn-primary:hover {
+  background-color: #8888ff;
+  border-color: #8888ff;
+}
+
+a {
+  color: #8888ff;
+}
+
+.primary {
+  color: #8888ff;
+}
+
+a:hover {
+  color: #5858ff;
+}
+
+.pointer {
+  cursor: pointer;
+  color: #8989ff;
+  text-decoration: underline;
+  font-size: medium;
+}
+
+.checkbox {
+  transform: scale(1.3);
+}
+
+html, body { height: 100%;}
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

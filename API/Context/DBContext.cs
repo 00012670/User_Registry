@@ -15,10 +15,12 @@ namespace API.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>(entity =>
+              modelBuilder.Entity<User>(entity =>
             {
-                entity.HasKey(e => e.UserId);
+                entity.ToTable("Users");
                 entity.Property(e => e.UserId).ValueGeneratedOnAdd();
+                entity.HasIndex(e => e.Username).IsUnique();
+                entity.HasIndex(e => e.Email).IsUnique();
             });
 
             modelBuilder.Entity<User>().ToTable("Users");

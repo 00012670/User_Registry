@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, NgModule } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { UserIdentityService } from '../../../services/user-identity.service';
 import { FormValidationService } from '../../../services/form-validation.service';
 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, RouterModule],
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.css'],
   providers: [UserIdentityService]
@@ -36,11 +36,10 @@ export class SignupComponent {
     if (this.formValidation.validateForm(this.signUpForm)) {
       this.identityService.signUp(this.signUpForm.value).subscribe(
         (response: any) => {
-          console.log('Signup response:', response);
           const token = response.token;
           const decodedToken = this.identityService.decodeToken(token);
           this.identityService.currentUser.next(decodedToken);
-          this.formValidation.handleSuccess("Signup successfully", this.router, 'dashboard');
+          this.formValidation.handleSuccess("Signup successfully", this.router, '/dashboard');
         },
         (error: { message: any; }) => {
           this.formValidation.handleError(error, error.message);

@@ -2,14 +2,12 @@ import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import ValidateForm from '../helpers/validateForm';
 import { NgToastService } from 'ng-angular-popup';
-import { Observable, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FormValidationService {
-
   userId!: number;
   submitted = false;
 
@@ -43,13 +41,13 @@ export class FormValidationService {
     }
   }
 
-
   handleSuccess(message: string, router: Router, route: string): void {
     router.navigate([route]);
     this.toast.success({ detail: 'SUCCESS', summary: message, duration: 4000 });
   }
 
   handleError(error: any, message: string): void {
-    this.toast.error({ detail: 'ERROR', summary: message, duration: 4000 });
+    const errorMessage = error?.error?.message || 'An error occurred';
+    this.toast.error({ detail: errorMessage });
   }
 }

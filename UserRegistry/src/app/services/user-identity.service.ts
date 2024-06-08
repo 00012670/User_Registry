@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../environments/environment';
 import { Router } from '@angular/router';
 import { BehaviorSubject, catchError, tap, throwError } from 'rxjs';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
   providedIn: 'root'
@@ -66,10 +67,24 @@ export class UserIdentityService {
 
   decodeToken(token: string) {
     const decodedToken = this.jwtHelper.decodeToken(token);
-    return decodedToken;
+    console.log(decodedToken);
+    // Check if the 'nameid' field exists in the decoded token
+    if ('nameid' in decodedToken) {
+      return decodedToken.nameid;
+    } else {
+      console.log('nameid field does not exist in the decoded token');
+      return null;
+    }
+
   }
 
   getUserId(): number | null {
-    return this.currentUser.value?.nameid ? Number(this.currentUser.value.nameid) : null;
+    // Check if currentUser.value exists and if it has a 'nameid' property
+    if (this.currentUser.value && 'nameid' in this.currentUser.value) {
+      return Number(this.currentUser.value.nameid);
+    } else {
+      console.log('currentUser.value is null or does not have a nameid property');
+      return null;
+    }
   }
 }

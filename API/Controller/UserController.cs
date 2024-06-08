@@ -15,7 +15,7 @@ public class UserController : Controller
         _userService = userService;
     }
 
-    [HttpGet]
+    [HttpGet("users")]
     public async Task<IActionResult> GetAllUsers()
     {
         var users = await _context.Users.ToListAsync();
@@ -52,7 +52,7 @@ public class UserController : Controller
         return NoContent();
     }
 
-    [HttpDelete]
+    [HttpDelete("delete-users")]
     public async Task<IActionResult> DeleteUsers([FromBody] List<int> userIds)
     {
         foreach (var id in userIds)
